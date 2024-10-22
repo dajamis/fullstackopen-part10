@@ -68,7 +68,7 @@ const Item = ({ item }) => (
           <Text style={{ fontWeight: "bold", fontSize: 16 }}>
             {item.fullName}
           </Text>
-          <Text>Description: {item.description}</Text>
+          <Text>{item.description}</Text>
           <Text style={styles.languageLabel}>Language: {item.language}</Text>
         </View>
       </View>
