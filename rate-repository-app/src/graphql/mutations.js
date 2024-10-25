@@ -8,22 +8,36 @@ export const AUTHENTICATE = gql`
   }
 `
 
-// export const CREATE_REPOSITORY = gql`
-//   mutation CreateRepository(
-//     $name: String!
-//     $description: String
-//     $visibility: Boolean
-//   ) {
-//     createRepository(
-//       name: $name
-//       description: $description
-//       visibility: $visibility
-//     ) {
-//       id
-//       fullName
-//       description
-//       ownerName
-//       visibility
-//     }
-//   }
-// `
+export const CREATE_REVIEW = gql`
+  mutation CreateReview(
+    $ownerName: String!
+    $repositoryName: String!
+    $rating: Int!
+    $text: String
+  ) {
+    createReview(
+      review: {
+        ownerName: $ownerName
+        repositoryName: $repositoryName
+        rating: $rating
+        text: $text
+      }
+    ) {
+      id
+      repositoryId
+    }
+  }
+`
+export const CREATE_USER = gql`
+  mutation CreateUser($user: CreateUserInput!) {
+    createUser(user: $user) {
+      id
+      username
+    }
+  }
+`
+export const DELETE_REVIEW = gql`
+  mutation DeleteReview($id: ID!) {
+    deleteReview(id: $id)
+  }
+`

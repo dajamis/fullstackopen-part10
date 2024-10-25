@@ -10,7 +10,7 @@ import useAuthStorage from "../hooks/useAuthStorage"
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: Constants.statusBarHeight,
+    paddingTop: Constants.statusBarHeight + 20,
     backgroundColor: theme.colors.appBarBackground,
     paddingRight: 20,
     paddingBottom: 20,
@@ -49,13 +49,26 @@ const AppBar = () => {
         </Link>
 
         {user ? (
-          <Pressable onPress={handleSignOut} style={styles.tab}>
-            <Text style={styles.text}>Sign out</Text>
-          </Pressable>
+          <>
+            <Link to="/review-form" component={Pressable} style={styles.tab}>
+              <Text style={styles.text}>Create a review</Text>
+            </Link>
+            <Link to="/my-reviews" component={Pressable} style={styles.tab}>
+              <Text style={styles.text}>My reviews</Text>
+            </Link>
+            <Pressable onPress={handleSignOut} style={styles.tab}>
+              <Text style={styles.text}>Sign out</Text>
+            </Pressable>
+          </>
         ) : (
-          <Link to="/sign-in" component={Pressable} style={styles.tab}>
-            <Text style={styles.text}>Sign in</Text>
-          </Link>
+          <>
+            <Link to="/sign-in" component={Pressable} style={styles.tab}>
+              <Text style={styles.text}>Sign in</Text>
+            </Link>
+            <Link to="/sign-up" component={Pressable} style={styles.tab}>
+              <Text style={styles.text}>Sign up</Text>
+            </Link>
+          </>
         )}
       </ScrollView>
     </View>

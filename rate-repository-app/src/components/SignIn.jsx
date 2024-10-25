@@ -8,45 +8,16 @@ import useSignIn from "../hooks/useSignIn"
 import { useNavigate } from "react-router-native"
 
 const validationSchema = yup.object().shape({
-  username: yup
-    .string()
-    .min(4, "Username must be at least 4 characters")
-    .required("Username is required"),
-  password: yup
-    .string()
-    .min(8, "Password must be at least 8 characters")
-    .required("Password is required"),
+  username: yup.string().required("Username is required"),
+  password: yup.string().required("Password is required"),
 })
 
-const SignIn = () => {
-  const [signIn] = useSignIn()
-  const navigate = useNavigate()
-
-  const initialValues = {
-    username: "",
-    password: "",
-  }
-
-  const onSubmit = async (values) => {
-    const { username, password } = values
-
-    try {
-      const response = await signIn({ username, password })
-
-      const accessToken = response?.authenticate?.accessToken
-      if (accessToken) {
-        console.log("Authentication successful")
-        navigate("/")
-      } else {
-        console.log("No access token found in the received data.")
-      }
-    } catch (e) {
-      console.error("Error during sign-in:", e)
-    }
-  }
-
+export const SignInContainer = ({ onSubmit }) => {
   const formik = useFormik({
-    initialValues,
+    initialValues: {
+      username: "",
+      password: "",
+    },
     validationSchema,
     onSubmit,
   })
@@ -63,6 +34,7 @@ const SignIn = () => {
         placeholder="Username"
         value={formik.values.username}
         onChangeText={formik.handleChange("username")}
+        testID="usernameInput"
       />
       {formik.touched.username && formik.errors.username && (
         <Text style={styles.errorText}>{formik.errors.username}</Text>
@@ -78,20 +50,50 @@ const SignIn = () => {
         secureTextEntry={true}
         value={formik.values.password}
         onChangeText={formik.handleChange("password")}
+        testID="passwordInput"
       />
       {formik.touched.password && formik.errors.password && (
         <Text style={styles.errorText}>{formik.errors.password}</Text>
       )}
-      <Pressable style={styles.button} onPress={formik.handleSubmit}>
+      <Pressable
+        style={styles.button}
+        onPress={formik.handleSubmit}
+        testID="submitButton"
+      >
         <Text style={styles.buttonText}>Sign in</Text>
       </Pressable>
     </View>
   )
 }
 
+const SignIn = () => {
+  const [signIn] = useSignIn()
+  const navigate = useNavigate()
+
+  const onSubmit = async (values) => {
+    const { username, password } = values
+
+    try {
+      const response = await signIn({ username, password })
+      const accessToken = response?.authenticate?.accessToken
+      if (accessToken) {
+        console.log("Authentication successful")
+        navigate("/")
+      } else {
+        console.log("No access token found in the received data.")
+      }
+    } catch (e) {
+      console.error("Error during sign-in:", e)
+    }
+  }
+
+  return <SignInContainer onSubmit={onSubmit} />
+}
+
 const styles = StyleSheet.create({
   container: {
     padding: 20,
+    backgroundColor: theme.colors.shades0,
   },
   input: {
     borderWidth: 1,
@@ -99,6 +101,7 @@ const styles = StyleSheet.create({
     padding: 10,
     marginBottom: 15,
     borderRadius: 5,
+    backgroundColor: theme.colors.shades0,
   },
   inputError: {
     borderColor: theme.colors.error,
